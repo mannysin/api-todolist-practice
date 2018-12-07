@@ -2,7 +2,6 @@ const express = require('express');
 const router  = express.Router();
 const Task    = require('../models/Task')
 
-/* GET home page */
 router.get('/tasks', (req, res, next) => {
   
   Task.find()
@@ -20,7 +19,7 @@ router.get('/tasks/details/:id', (req, res, next)=> {
     res.json(theTask)
   })
   .catch((err)=> {
-    next(err)
+    res.json(err)
   })
 })
 
@@ -33,7 +32,7 @@ router.post('/tasks/add-new', (req, res, next)=> {
     res.json(theThingIAmGettingBack)
   })
   .catch((err)=> {
-    next(err)
+    res.json(err)
   })
 })
 
@@ -46,7 +45,23 @@ router.post('/tasks/edit/:id', (req, res, next)=> {
     res.json([{message: 'this task has been successfully updated'}], theThingIAmGettingBack)
   })
   .catch((err)=> {
-    next(err)
+    res.json(err)
+  })
+})
+
+router.post('/tasks/delete/:id', (req, res, next)=> {
+  Task.findByIdAndRemove(req.params.id)
+  .then((deletedTask)=> {
+    if(!deletedTask) {
+      res.json({message: 'sorry this task could not be found'})
+    }
+    res.json([
+      {message: 'task successfully deleted'},
+      deletedTask
+    ])
+  })
+  .catch((err)=> {
+    res.json(err)
   })
 })
 

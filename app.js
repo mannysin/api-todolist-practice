@@ -9,6 +9,8 @@ const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
 
+const cors         = require('cors')
+
 
 mongoose
   .connect('mongodb://localhost/to-do-list-app', {useNewUrlParser: true})
@@ -49,7 +51,10 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 // default value for title local
 app.locals.title = 'Express - Generated with IronGenerator';
 
-
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:3000']
+}))
 
 const index = require('./routes/index');
 app.use('/', index);
